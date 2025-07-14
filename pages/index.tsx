@@ -1,38 +1,55 @@
-import Head from 'next/head'
+import React, { useState } from 'react';
+import Head from 'next/head';
+import { PROPERTYLISTINGSAMPLE } from '../constants';
+import PropertyCard from '../components/PropertyCard';
+import Pill from '../components/Pill';
 
-export default function Home() {
+const Home: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const filters = ['Top Villa', 'Self Checkin', 'Luxury', 'Beachfront', 'Mountain View', 'Pet Friendly'];
+
   return (
-    <div className="min-h-screen">
+    <>
       <Head>
-        <title>Airbnb Clone</title>
-        <meta name="description" content="Airbnb clone built with Next.js" />
+        <title>StayFinder - Find Your Perfect Stay</title>
+        <meta name="description" content="Find your favorite place here!" />
       </Head>
 
-      <header className="border-b p-4">
-        <nav className="flex justify-between items-center">
-          <div className="text-rose-500 font-bold text-xl">airbnb</div>
-          <div className="space-x-4">
-            <button className="font-medium">Become a Host</button>
-            <button className="bg-rose-500 text-white px-4 py-2 rounded-full">
-              Sign Up
-            </button>
-          </div>
-        </nav>
-      </header>
+      <section className="relative h-96 flex items-center justify-center bg-gray-900 text-white">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 text-center px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Find your favorite place here!
+          </h1>
+          <p className="text-xl md:text-2xl">
+            The best prices for over 2 million properties worldwide.
+          </p>
+        </div>
+      </section>
 
-      <main className="p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((item) => (
-            <div key={item} className="border rounded-xl overflow-hidden">
-              <div className="h-48 bg-gray-200"></div>
-              <div className="p-4">
-                <h3 className="font-semibold">Beautiful Place {item}</h3>
-                <p className="text-gray-500">$120 night</p>
-              </div>
-            </div>
+      <section className="container mx-auto px-4 py-8">
+        <div className="flex space-x-4 overflow-x-auto pb-4">
+          {filters.map((filter) => (
+            <Pill
+              key={filter}
+              label={filter}
+              active={activeFilter === filter}
+              onClick={() => setActiveFilter(activeFilter === filter ? null : filter)}
+            />
           ))}
         </div>
-      </main>
-    </div>
-  )
-}
+      </section>
+
+      <section className="container mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold mb-6">Featured Properties</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {PROPERTYLISTINGSAMPLE.map((property) => (
+            <PropertyCard key={property.name} {...property} />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default Home;
